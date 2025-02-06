@@ -10,7 +10,7 @@ function updateCounter(elementId, startYear) {
     let startOf2025 = new Date("2025-01-01T00:00:00Z").getTime();
     let startOf2026 = new Date("2026-01-01T00:00:00Z").getTime();
 
-    // Before 2025: Display "Coming Soon..."
+    // Before 2025: Display "Starting Soon..."
     if (currentTime < startOf2025) {
         document.getElementById(elementId).innerText = "Starting in 2025...";
         return;

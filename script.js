@@ -3,13 +3,20 @@ function getCurrentYear() {
     return new Date().getFullYear();
 }
 
-// Function to calculate counter values and reset yearly
+// Function to update counters (resets every January 1st)
 function updateCounter(elementId, startYear) {
     let currentYear = getCurrentYear();
-    
-    // Reset counter at the beginning of each new year
-    let yearProgress = new Date().getMonth() / 12; // Progress in the year (0 to 1)
-    let counterValue = startYear + yearProgress; // Resets each year to startYear
+
+    // Start counting only from 2025 and reset on Jan 1, 2026
+    if (currentYear < 2025) {
+        document.getElementById(elementId).innerText = "Starting in 2025...";
+        return;
+    }
+
+    let startOfYear = new Date(currentYear, 0, 1).getTime();
+    let currentTime = new Date().getTime();
+    let yearProgress = (currentTime - startOfYear) / (1000 * 60 * 60 * 24 * 365); // Progress of the year
+    let counterValue = startYear + yearProgress;
 
     document.getElementById(elementId).innerText = Math.floor(counterValue);
 }
@@ -20,26 +27,35 @@ function updateBigMacCounters() {
     let startOfYear = new Date(getCurrentYear(), 0, 1).getTime(); // Midnight of Jan 1
     let currentTime = new Date().getTime();
     
-    let elapsedSecondsTotal = Math.floor((currentTime - new Date("2024-01-01T00:00:00Z").getTime()) / 1000);
+    // Start counting Big Macs from January 1, 2025
+    let startOfBigMacCount = new Date("2025-01-01T00:00:00Z").getTime();
+    if (currentTime < startOfBigMacCount) {
+        document.getElementById("bigMacCounter").innerText = "Starting in 2025...";
+        document.getElementById("bigMacThisYear").innerText = "Starting in 2025...";
+        return;
+    }
+
+    let elapsedSecondsTotal = Math.floor((currentTime - startOfBigMacCount) / 1000);
     let elapsedSecondsThisYear = Math.floor((currentTime - startOfYear) / 1000);
 
     let currentBigMacCount = baseBigMacs + (elapsedSecondsTotal * 75); // 75 Big Macs per second (Global)
-    let bigMacsThisYear = elapsedSecondsThisYear * 75; // Reset each year
+    let bigMacsThisYear = elapsedSecondsThisYear * 75; // Resets every year
 
     document.getElementById("bigMacCounter").innerText = currentBigMacCount.toLocaleString();
     document.getElementById("bigMacThisYear").innerText = bigMacsThisYear.toLocaleString();
 }
 
-// Initial Counter Updates (Resets Each Year)
-updateCounter("globalCounter", 2000);   // 🌍 Global Counter (Resets each year)
-updateCounter("personalCounter", 2015); // 📅 Personal Counter (Resets each year)
-updateCounter("eventCounter", 2023);    // 🚀 Custom Event (Resets each year)
+// Initial Counter Updates
+updateCounter("globalCounter", 2025);   // 🌍 Starts in 2025
+updateCounter("personalCounter", 2025); // 📅 Personal Counter (Resets yearly)
+updateCounter("eventCounter", 2025);    // 🚀 Custom Event (Resets yearly)
 updateBigMacCounters();                  // 🍔 Big Mac Counters
 
 // Update every second
 setInterval(() => {
-    updateCounter("globalCounter", 2000);
-    updateCounter("personalCounter", 2015);
-    updateCounter("eventCounter", 2023);
+    updateCounter("globalCounter", 2025);
+    updateCounter("personalCounter", 2025);
+    updateCounter("eventCounter", 2025);
     updateBigMacCounters();
 }, 1000);
+

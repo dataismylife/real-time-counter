@@ -58,4 +58,3 @@ setInterval(() => {
     updateCounter("eventCounter", 2025);
     updateBigMacCounters();
 }, 1000);
-
